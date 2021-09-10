@@ -73,6 +73,13 @@ exports.deleteTruck = catchAsync(async (req, res) => {
 });
 
 exports.assignTruck = catchAsync(async (req, res) => {
+  const assignedTruck = await Truck.findOne({ assigned_to: req.user.id });
+  if (assignedTruck) {
+    return res.status(400).json({
+      message: 'Driver can only assign one truck!',
+    });
+  }
+
   const truck = await Truck.findByIdAndUpdate(
     req.params.id,
     { assigned_to: req.user.id },

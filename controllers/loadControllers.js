@@ -7,7 +7,6 @@ const findTruckType = require('../utils/findTruckType');
 exports.getUsersLoads = catchAsync(async (req, res) => {
   const { limit, offset, status } = req.query;
 
-  console.log(req.user);
   let loads;
   if (req.user.role === 'DRIVER') {
     loads = await Load.find(
@@ -130,7 +129,7 @@ exports.postLoad = catchAsync(async (req, res) => {
     time: Date.now(),
   });
   load.state = 'En route to pick up';
-  truck.status = 'IS';
+  truck.status = 'OL';
   load.assigned_to = truck.created_by;
   driverFound = true;
 

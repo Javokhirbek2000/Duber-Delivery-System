@@ -6,8 +6,8 @@ require('dotenv').config({ path: './../config.env' });
 
 const authMiddleware = async (req, res, next) => {
   let token;
-  if (req.headers.cookie && req.headers.cookie.startsWith('jwt')) {
-    token = req.headers.cookie.split('=')[1];
+  if (req.headers.authorization) {
+    token = req.headers.authorization;
   }
 
   if (!token) {
