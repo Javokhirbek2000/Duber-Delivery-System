@@ -16,14 +16,13 @@ exports.addTruck = catchAsync(async (req, res) => {
     });
   }
 
-  const newTruck = await Truck.create({
+  await Truck.create({
     ...req.body,
     created_by: req.user.id,
   });
 
   res.status(200).json({
     message: 'New truck has been created successfully!',
-    newTruck,
   });
 });
 
@@ -33,7 +32,7 @@ exports.getTruck = catchAsync(async (req, res) => {
       message: 'Invalid truck ID',
     });
   }
-  const truck = await Truck.findOne({ id: req.params.id });
+  const truck = await Truck.findOne({ _id: req.params.id });
 
   res.status(200).json({
     truck,
@@ -60,8 +59,7 @@ exports.updateTruck = catchAsync(async (req, res) => {
   }
 
   res.status(200).json({
-    message: 'Truck updated successfully',
-    truck,
+    message: 'Truck details changed successfully',
   });
 });
 
@@ -80,7 +78,7 @@ exports.assignTruck = catchAsync(async (req, res) => {
     });
   }
 
-  const truck = await Truck.findByIdAndUpdate(
+  await Truck.findByIdAndUpdate(
     req.params.id,
     { assigned_to: req.user.id },
     {
@@ -91,6 +89,5 @@ exports.assignTruck = catchAsync(async (req, res) => {
 
   res.status(200).json({
     message: 'Truck assigned successfully!',
-    truck,
   });
 });
