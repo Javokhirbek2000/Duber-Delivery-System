@@ -63,15 +63,15 @@ exports.forgottenPassword = async (req, res, next) => {
     .replace(/[^a-z]+/g, '')
     .substr(0, 6);
 
-  user.password = await bcrypt.hash(temporaryPassword, 12);
+  user.password = await bcrypt.hash(temporaryPassword, 10);
   await user.save({
     validateBeforeSave: false,
   });
 
   const emailOptions = {
-    email: req.body.email,
+    email: user.email,
     subject: 'Reset Password',
-    message: `Temporary password: ${temporaryPassword}`,
+    message: `Temporary password: ${temporaryPassword}\n Log In your account with this password and update your password!`,
   };
   sendEmail(emailOptions);
 

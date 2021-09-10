@@ -6,7 +6,6 @@ const sendEmail = catchAsync(async (options) => {
   // 1) Create a transporter
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
-    port: 587,
     secure: false,
     requireTLS: true,
     auth: {
@@ -20,7 +19,7 @@ const sendEmail = catchAsync(async (options) => {
 
   // 2) Define the email options
   const mailOptions = {
-    from: 'EpamProject Systems <deliverysystems.support@gmail.com>',
+    from: `${process.env.EMAIL_USERNAME}`,
     to: options.email,
     subject: options.subject,
     text: options.message,

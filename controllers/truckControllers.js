@@ -40,6 +40,12 @@ exports.getTruck = catchAsync(async (req, res) => {
 });
 
 exports.updateTruck = catchAsync(async (req, res) => {
+  const assignedTruck = await Truck.findOne({ assigned_to: req.user.id });
+  if (assignedTruck) {
+    return res.status(400).json({
+      message: 'You cannot update truck while it is assigned',
+    });
+  }
   const newType = req.body.type;
 
   if (!newType) {
@@ -64,6 +70,13 @@ exports.updateTruck = catchAsync(async (req, res) => {
 });
 
 exports.deleteTruck = catchAsync(async (req, res) => {
+  const truck = await Truck.findOne({ assigned_to: req.user.id });
+  if (truck) {
+    return res.status(400).json({
+      message: 'You cannot delete truck while it is assigned',
+    });
+  }
+
   await Truck.findByIdAndRemove(req.params.id);
   res.status(200).json({
     message: 'Truck deleted successfully!',

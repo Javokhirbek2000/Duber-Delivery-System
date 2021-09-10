@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const Truck = require('../models/truckModel');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 
@@ -10,6 +11,12 @@ exports.getUserInfo = catchAsync(async (req, res) => {
 });
 
 exports.deleteUser = catchAsync(async (req, res) => {
+  const assignedTrucks = Truck.findOne({ assigned_to: req.user.id });
+  if (assignedTrucks) {
+    return res.status(400).json({
+      message: 'You cannot delete profile while it is assigned to truck',
+    });
+  }
   await User.findOneAndRemove({ _id: req.user._id });
   res.status(200).json({
     message: 'Profile deleted successfully!',
